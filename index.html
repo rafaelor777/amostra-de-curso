@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Mercado Mix</title>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- ================= HEADER ================= -->
+
+  <header class="glass header">
+
+    <a href="#" class="logo" onclick="voltarInicio(); return false;">
+      <span class="logo-icon">🛒</span>
+      <span>MERCADO <strong>MIX</strong></span>
+    </a>
+
+    <div class="search-box">
+
+      <input
+        type="text"
+        id="busca"
+        placeholder="Buscar produtos..."
+        onkeydown="if(event.key === 'Enter') buscar()"
+      >
+
+      <button onclick="buscar()">🔎</button>
+
+    </div>
+
+    <div class="header-actions">
+
+      <button class="header-btn" onclick="mostrarFavoritos()">
+        ❤️ Favoritos
+        <span id="contadorFavoritos">0</span>
+      </button>
+
+      <button class="header-btn" onclick="abrirLogin()">
+        👤
+        <span id="contaTexto">Entrar</span>
+      </button>
+
+      <button class="header-btn cart-btn" onclick="abrirCarrinho()">
+        🛒 Carrinho
+        <span id="contador">0</span>
+      </button>
+
+    </div>
+
+  </header>
+
+
+  <!-- ================= CATEGORIAS ================= -->
+
+  <nav class="categories glass">
+
+    <button onclick="filtrar('Todos')">
+      🏠 Todos
+    </button>
+
+    <button onclick="filtrar('Ofertas')">
+      🔥 Ofertas
+    </button>
+
+    <button onclick="filtrar('Frutas')">
+      🍎 Frutas
+    </button>
+
+    <button onclick="filtrar('Verduras')">
+      🥬 Verduras
+    </button>
+
+    <button onclick="filtrar('Carnes')">
+      🥩 Carnes
+    </button>
+
+    <button onclick="filtrar('Bebidas')">
+      🥤 Bebidas
+    </button>
+
+    <button onclick="filtrar('Limpeza')">
+      🧹 Limpeza
+    </button>
+
+    <button onclick="filtrar('Banheiro')">
+      🛁 Banheiro
+    </button>
+
+    <button onclick="filtrar('Padaria')">
+      🥖 Padaria
+    </button>
+
+    <button onclick="filtrar('Mercearia')">
+      🛒 Mercearia
+    </button>
+
+  </nav>
+
+
+  <main class="container">
+    
+    <section class="hero glass">
+      <div class="ofertas-carousel">
+    
+        <div class="ofertas-track" id="ofertasTrack"></div>
+    
+        <button
+        class="oferta-arrow oferta-prev"
+        onclick="moverOferta(-1)"
+        aria-label="Oferta anterior"
+      >
+        ❮
+      </button>
+      
+      <button
+        class="oferta-arrow oferta-next"
+        onclick="moverOferta(1)"
+        aria-label="Próxima oferta"
+      >
+        ❯
+      </button>
+    
+        <div class="ofertas-dots" id="ofertasDots"></div>
+    
+      </div>
+    </section>
+
+    <!-- ================= PRODUTOS ================= -->
+
+    <section class="products-section">
+
+      <div class="section-header">
+
+        <h2
+          class="section-title"
+          id="tituloProdutos"
+        >
+          🛍️ Todos os produtos
+        </h2>
+
+        <button
+          class="see-all"
+          onclick="filtrar('Todos')"
+        >
+          Ver todos →
+        </button>
+
+      </div>
+
+
+      <div
+        class="products-grid"
+        id="produtos"
+      ></div>
+
+    </section>
+
+  </main>
+
+
+  <!-- ================= CARRINHO ================= -->
+
+  <div
+    class="modal-overlay"
+    id="modal"
+  >
+
+    <div class="modal-card cart-modal">
+
+      <button
+        class="close-modal"
+        onclick="fecharCarrinho()"
+      >
+        ✕
+      </button>
+
+      <h2>
+        🛒 Seu carrinho
+      </h2>
+
+      <div id="itensCarrinho"></div>
+
+      <div class="cart-total">
+
+        <span>
+          Total:
+        </span>
+
+        <strong id="total">
+          R$ 0,00
+        </strong>
+
+      </div>
+
+      <button
+        class="btn-primary-full"
+        onclick="finalizarCompra()"
+      >
+        Finalizar compra
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- ================= LOGIN ================= -->
+
+  <div
+    class="modal-overlay"
+    id="loginModal"
+  >
+
+    <div class="modal-card login-card">
+
+      <button
+        class="close-modal"
+        onclick="fecharLogin()"
+      >
+        ✕
+      </button>
+
+
+      <div class="login-icon">
+        👤
+      </div>
+
+
+      <h2 id="loginTitulo">
+        Entrar na conta
+      </h2>
+
+
+      <p class="login-subtitle">
+        Entre para acompanhar seus favoritos e compras.
+      </p>
+
+
+      <form
+        id="loginForm"
+        onsubmit="entrarConta(event)"
+      >
+
+        <label for="loginEmail">
+          E-mail
+        </label>
+
+        <input
+          type="email"
+          id="loginEmail"
+          placeholder="seuemail@email.com"
+          required
+        >
+
+
+        <label for="loginSenha">
+          Senha
+        </label>
+
+        <input
+          type="password"
+          id="loginSenha"
+          placeholder="Digite sua senha"
+          minlength="4"
+          required
+        >
+
+
+        <button
+          type="submit"
+          class="btn-primary-full"
+        >
+          Entrar
+        </button>
+
+      </form>
+
+
+      <button
+        class="login-demo"
+        onclick="
+          document.getElementById('loginEmail').value='usuario@mercadomix.com';
+          document.getElementById('loginSenha').value='1234';
+        "
+      >
+        Preencher exemplo
+      </button>
+
+
+      <button
+        class="logout-btn"
+        id="logoutBtn"
+        onclick="sairConta()"
+        style="display:none;"
+      >
+        Sair da conta
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- ================= TOAST ================= -->
+
+  <div
+    id="toast"
+    class="toast"
+  ></div>
+
+
+  <script src="script.js"></script>
+
+
+<!-- ================= AVALIAÇÕES ================= -->
+
+<section class="avaliacoes glass">
+
+  <div class="avaliacoes-titulo">
+    <span>⭐</span>
+    <h2>Avalie o Mercado Mix</h2>
+    <p>Conte para nós o que você achou da sua experiência!</p>
+  </div>
+
+  <div class="avaliacao-form">
+
+    <div class="estrelas" id="estrelas">
+      <button type="button" data-estrela="1">★</button>
+      <button type="button" data-estrela="2">★</button>
+      <button type="button" data-estrela="3">★</button>
+      <button type="button" data-estrela="4">★</button>
+      <button type="button" data-estrela="5">★</button>
+    </div>
+
+    <p id="textoEstrelas">Escolha uma nota</p>
+
+    <textarea
+      id="comentarioAvaliacao"
+      placeholder="Escreva um comentário..."
+      maxlength="300">
+    </textarea>
+
+    <button
+      type="button"
+      class="btn-avaliar"
+      onclick="enviarAvaliacao()">
+      ⭐ Enviar avaliação
+    </button>
+
+  </div>
+
+  <div class="avaliacoes-lista">
+    <h3>O que nossos clientes acharam</h3>
+    <div id="listaAvaliacoes"></div>
+  </div>
+
+</section>
+
+
+</body>
+
+</html>
